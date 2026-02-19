@@ -1,11 +1,30 @@
 
-//import { Link } from 'react-router' 
-import { useState } from 'react' 
+import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 
 export default function Navigation() { 
  const [profileOpen, setProfileOpen] = useState(false);
  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const closeMenus = () => {
+    setProfileOpen(false);
+    setMobileOpen(false);
+  };
+
+  const navItems = [
+    { label: 'Dashboard', to: '/dashboard' },
+    { label: 'Listings', to: '/listings' },
+    { label: 'Profile', to: '/profile' },
+  ] as const;
+
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    [
+      'px-3 py-2 rounded-md text-sm font-medium',
+      isActive
+        ? 'bg-gray-900 text-white'
+        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+    ].join(' ');
 
   return (
     <nav className="relative bg-gray-800">
@@ -16,26 +35,28 @@ export default function Navigation() {
 
           {/* Logo */}
           <div className="flex items-center">
-            <img
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-              className="h-8 w-auto"
-            />
+            <Link to="/" onClick={closeMenus} className="flex items-center">
+              <img
+                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                className="h-8 w-auto"
+                alt="Green Mountain"
+              />
+            </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden sm:flex space-x-4">
 
-            <a className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-              Dashboard
-            </a>
-
-            <a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-              Posts
-            </a>
-
-            <a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-              Activities
-            </a>
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={navLinkClass}
+                onClick={closeMenus}
+              >
+                {item.label}
+              </NavLink>
+            ))}
 
           </div>
 
@@ -59,17 +80,29 @@ export default function Navigation() {
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg">
 
-                  <button className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700">
+                  <NavLink
+                    to="/profile"
+                    onClick={closeMenus}
+                    className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
+                  >
                     Your Profile
-                  </button>
+                  </NavLink>
 
-                  <button className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700">
+                  <NavLink
+                    to="/profile"
+                    onClick={closeMenus}
+                    className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
+                  >
                     Settings
-                  </button>
+                  </NavLink>
 
-                  <button className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700">
+                  <NavLink
+                    to="/login"
+                    onClick={closeMenus}
+                    className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
+                  >
                     Sign out
-                  </button>
+                  </NavLink>
 
                 </div>
               )}
@@ -94,9 +127,23 @@ export default function Navigation() {
       {mobileOpen && (
         <div className="sm:hidden px-6 pb-4 space-y-2">
 
-          <div className="text-white">Dashboard</div>
-          <div className="text-gray-300">Team</div>
-          <div className="text-gray-300">Projects</div>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                [
+                  'block px-3 py-2 rounded-md text-base font-medium',
+                  isActive
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                ].join(' ')
+              }
+              onClick={closeMenus}
+            >
+              {item.label}
+            </NavLink>
+          ))}
 
         </div>
       )}

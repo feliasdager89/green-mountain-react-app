@@ -1,5 +1,3 @@
-
-import Navigation from '../Components/Navigation'
 import Card from '../Components/Card' 
 import posts from '../Database/posts.json'
 
@@ -8,7 +6,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-        <Navigation/>
         <h1>Dashboard</h1>  
         {/*Header*/} 
         <div className="bg-white shadow p-6">
