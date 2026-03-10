@@ -1,4 +1,5 @@
 import Card from '../Components/Card' 
+import Search from '../Components/Search'
 import posts from '../Database/posts.json'
 
 
@@ -11,7 +12,8 @@ export default function Dashboard() {
         <div className="bg-white shadow p-6">
         <h1 className="text-3xl font-bold text-gray-800">
           Dashboard
-        </h1>
+        </h1> 
+        <Search />
       </div> 
       {/*Content*/}
       <div 
