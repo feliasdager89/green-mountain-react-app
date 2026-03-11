@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 export default function Card({ title, description, onClick }: { title: string; description: string; onClick?: () => void }) {
   return (
