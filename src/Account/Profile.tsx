@@ -1,8 +1,11 @@
-
-import { useAuth } from "../auth/AuthContext";
+import { useAppSelector } from "../hooks";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const user = useAppSelector((state) => state.accountReducer.currentUser);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 px-4 py-10">

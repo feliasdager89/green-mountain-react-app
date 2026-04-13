@@ -1,35 +1,34 @@
+
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline'
-import { useAuth } from '../auth/AuthContext';
+import { signout } from '../Account/client';
+import { clearCurrentUser } from '../Account/reducer';
+import { useAppDispatch } from '../hooks';
 
 export default function Navigation() { 
- const navigate = useNavigate();
- const { isAuthenticated, logout, user } = useAuth();
  const [profileOpen, setProfileOpen] = useState(false);
  const [mobileOpen, setMobileOpen] = useState(false);
+ const navigate = useNavigate();
+ const dispatch = useAppDispatch();
+
+  const handleSignout = () => {
+    signout();
+    dispatch(clearCurrentUser());
+    closeMenus();
+    navigate('/login');
+  };
 
   const closeMenus = () => {
     setProfileOpen(false);
     setMobileOpen(false);
   };
 
-  const navItems = isAuthenticated
-    ? ([
-        { label: 'Dashboard', to: '/dashboard' },
-        { label: 'Listings', to: '/listings' },
-        { label: 'Profile', to: '/profile' },
-      ] as const)
-    : ([
-        { label: 'Login', to: '/login' },
-        { label: 'Register', to: '/register' },
-      ] as const);
-
-  const handleLogout = () => {
-    logout();
-    closeMenus();
-    navigate("/login", { replace: true });
-  };
+  const navItems = [
+    { label: 'Dashboard', to: '/dashboard' },
+    { label: 'Listings', to: '/listings' },
+    { label: 'Profile', to: '/profile' },
+  ] as const;
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
@@ -40,14 +39,14 @@ export default function Navigation() {
     ].join(' ');
 
   return (
-    <nav className="fixed right-0 left-0 top-0 bg-gray-800 z-50">
+    <nav className="relative bg-gray-800">
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6">
 
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
-          <div className="flex items-center ">
+          <div className="flex items-center">
             <Link to="/" onClick={closeMenus} className="flex items-center">
               <img
                 src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
@@ -92,58 +91,30 @@ export default function Navigation() {
 
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg">
-                  {isAuthenticated ? (
-                    <>
-                      <div className="border-b border-gray-700 px-4 py-3 text-sm text-gray-300">
-                        <p className="font-medium text-white">
-                          {user ? `${user.first_name} ${user.last_name}` : "Signed in"}
-                        </p>
-                        <p className="truncate text-xs text-gray-400">{user?.email}</p>
-                      </div>
 
-                      <NavLink
-                        to="/profile"
-                        onClick={closeMenus}
-                        className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
-                      >
-                        Your Profile
-                      </NavLink>
+                  <NavLink
+                    to="/profile"
+                    onClick={closeMenus}
+                    className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
+                  >
+                    Your Profile
+                  </NavLink>
 
-                      <NavLink
-                        to="/dashboard"
-                        onClick={closeMenus}
-                        className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
-                      >
-                        Dashboard
-                      </NavLink>
+                  <NavLink
+                    to="/profile"
+                    onClick={closeMenus}
+                    className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
+                  >
+                    Settings
+                  </NavLink>
 
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="block w-full cursor-pointer px-4 py-2 text-left text-gray-300 hover:bg-gray-700"
-                      >
-                        Sign out
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <NavLink
-                        to="/login"
-                        onClick={closeMenus}
-                        className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
-                      >
-                        Login
-                      </NavLink>
-
-                      <NavLink
-                        to="/register"
-                        onClick={closeMenus}
-                        className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
-                      >
-                        Register
-                      </NavLink>
-                    </>
-                  )}
+                  <button
+                    type="button"
+                    onClick={handleSignout}
+                    className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700"
+                  >
+                    Sign out
+                  </button>
 
                 </div>
               )}
@@ -185,6 +156,14 @@ export default function Navigation() {
               {item.label}
             </NavLink>
           ))}
+
+          <button
+            type="button"
+            onClick={handleSignout}
+            className="block w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+          >
+            Sign out
+          </button>
 
         </div>
       )}

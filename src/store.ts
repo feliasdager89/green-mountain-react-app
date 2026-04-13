@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import accountReducer from "./Account/reducer";
 import listingsReducer from "./Listings/reducer";
 
 export const store = configureStore({
   reducer: {
+    accountReducer,
     listingsReducer,
   },
 });

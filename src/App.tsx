@@ -4,18 +4,18 @@
 import './App.css' 
 import type { ReactElement } from "react";
 import Landing from "./Pages/Landing";
-import Login from "./Pages/Login";
-import Signin from "./Pages/Signin";
+import Login from "./Account/Login";
+import Signup from "./Account/Signup";
 import Dashboard from "./Pages/Dashboard";
 
 
 
 import { Navigate, Route, Routes } from "react-router-dom";
-import Profile from './Pages/Profile';
+import Profile from './Account/Profile';
 import Navigation from './Components/Navigation';
-import { useAuth } from './auth/AuthContext';
 import ListingDetails from './Listings/ListingDetails';
 import Listings from './Listings';
+import { useAuth } from "./hooks";
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
   const { isAuthenticated } = useAuth();
@@ -46,7 +46,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
-        <Route path="/register" element={<PublicOnlyRoute><Signin/></PublicOnlyRoute>} />
+        <Route path="/register" element={<PublicOnlyRoute><Signup /></PublicOnlyRoute>} />
+        <Route path="/signup" element={<PublicOnlyRoute><Signup /></PublicOnlyRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> 
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> 
          <Route path="/listings" element={<Listings />} />
